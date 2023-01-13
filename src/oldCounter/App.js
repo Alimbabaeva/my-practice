@@ -6,33 +6,34 @@ class App extends React.Component {
         this.state = {
             hour: "00",
             minute: "00",
-            second: '00'
+            second: '00',
         }
         this.interval= null
     }
     startHandler = () => {
+//avoiding doubling our interval when we hit start 2 times in a row
+        if(this.interval !== null){
+            clearInterval(this.interval)
+        }
         //working with numbers
          this.interval=setInterval(()=>{
-            if( +this.state.second === 9){
-                this.setState({minute: +this.state.minute+1, second: 0})
+            if( +this.state.second === 59){
+                this.setState({minute: (+this.state.minute+1).toString().padStart(2,0), second: 0})
             }
-            else if(+this.state.minute ===9){
-                this.setState({hour: +this.state.hour +1, minute:0})
+            else if(+this.state.minute ===59){
+                this.setState({hour:( +this.state.hour +1).toString().padStart(2,0), minute:0})
             }  else {
-                this.setState({second: +this.state.second +1})
+                this.setState({second:( +this.state.second +1).toString().padStart(2,0)})
             }
-            //convert numbers into string;
-            // this.setState({
-
-            // })
-            console.log(this.state, 'state')
-         }, 1000)
+       
+         }, 200)
     }
     pauseHandler = () => {
         clearInterval(this.interval)
     }
     resetHandler=() => {
-       
+       clearInterval(this.interval)
+       this.setState({hour: '00', minute: '00', second:'00'})
     }
     render() {
         return (
